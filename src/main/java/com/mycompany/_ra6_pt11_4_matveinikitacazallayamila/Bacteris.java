@@ -13,10 +13,10 @@ public class Bacteris {
     private int matriu[][];
     private boolean coloniaEstable;
     int numIteracions;
-    final int DIMENSIO_COLONIA = 30;
+    final static int DIMENSIO_COLONIA = 30;
 
     public Bacteris() {
-        this.matriu = new int[DIMENSIO_COLONIA][DIMENSIO_COLONIA];
+        this(DIMENSIO_COLONIA);
     }
 
     public Bacteris(int dimensioColonia) {
@@ -24,17 +24,21 @@ public class Bacteris {
     }
 
     public void generacioInicial() {
-
         for (int i = 0; i < matriu.length; i++) {
             for (int j = 0; j < matriu[i].length; j++) {
-                matriu[i][j] = (int) Math.random() * 2;
+                matriu[i][j] = (int) (Math.random() * 2);
             }
         }
-
     }
 
     public void mostrarInformacio() {
-
+        for (int i = 0; i < matriu.length; i++) {
+            System.out.print("|");
+            for (int j = 0; j < matriu[i].length; j++) {
+                System.out.print(matriu[i][j]);
+            }
+            System.out.println("|");
+        }
     }
 
     public void generarGeneracio() {
@@ -43,12 +47,27 @@ public class Bacteris {
 
     public int veins(int posicioI, int posicioJ) {
         
-        int sumVeins = 0;
+        int sumVeins = 0, iniciI = 1, iniciJ = 1 , finalI = 2, finalJ = 2;
+        final int VECINO = 1;
+        
+        if (posicioI == 0) {
+            iniciI = 0;
+        } else if (posicioI == (matriu.length - 1)) {
+            finalI = 1;
+        }
+        
+        if (posicioJ == 0) {
+            iniciJ = 0;
+        } else if (posicioJ == (matriu[posicioI].length -1)) {
+            finalJ = 1;
+        }
 
-        for (int i = -1; i < 1; i++) {
-            for (int j = -1; j < 1; j++) {
-                if (i != 0 && j != 0) {
-                    sumVeins += matriu[i][j];
+        for (int i = posicioI - iniciI; i < (posicioI + finalI); i++) {
+            for (int j = posicioJ - iniciJ; j < (posicioJ + finalJ); j++) {
+                if (!(i == posicioI && j == posicioJ)) {
+                    if(matriu[i][j] == VECINO){
+                       sumVeins++; 
+                    }
                 }
             }
         }

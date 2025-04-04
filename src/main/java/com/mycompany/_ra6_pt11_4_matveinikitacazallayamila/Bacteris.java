@@ -1,6 +1,5 @@
 package com.mycompany._ra6_pt11_4_matveinikitacazallayamila;
 
-import java.util.Random;
 
 /**
  * Classe Bacteris
@@ -11,6 +10,7 @@ public class Bacteris {
     
     /*Declaració de variables i atributs*/
     private int colonia[][];
+    private int coloniaNova[][];
     private boolean coloniaEstable;
     private int numIteracions;
     private final static int DIMENSIO_PER_DEFECTE = 30;
@@ -29,15 +29,46 @@ public class Bacteris {
      */
     public Bacteris(int dimensio) {
         this.colonia = new int [dimensio][dimensio];
+        this.generacioIncial();
+        this.coloniaNova = new int[dimensio][dimensio];
+        this.coloniaNova = this.colonia;
         this.coloniaEstable = false;
         this.numIteracions = 0;
     }
+
+    public int getNumIteracions() {
+        return numIteracions;
+    }
+
+    public void setNumIteracions(int numIteracions) {
+        this.numIteracions = numIteracions;
+    }
     
-    public void generacioIncial(){
-        Random generarNombres = new Random();
+    
+    /**
+     * Mètode generacioIncial per omplir la matriu que representa la colònia de 
+     * bacteris
+     */
+    private void generacioIncial(){
         for (int i = 0; i < colonia.length; i++) {
             for (int j = 0; j < colonia.length; j++) {
                 colonia[i][j] = (int) (Math.random() * 2);
+            }
+        }
+    }
+    
+    public void novaGeneracio(){
+        for (int i = 0; i < colonia.length; i++) {
+            for (int j = 0; j < colonia.length; j++) {
+                int veins = veins(i,j);
+                if(colonia[i][j] == 1){
+                    if (veins < 2 || veins > 3){
+                        coloniaNova[i][j] = 1;
+                    }
+                    else{
+                        
+                    }
+                }
             }
         }
     }
@@ -55,4 +86,33 @@ public class Bacteris {
         }
     }
     
+    public int veins(int posicioI, int posicioJ) {
+        /*Declaració de variables*/
+        int sumVeins = 0, iniciI = 1, iniciJ = 1 , finalI = 2, finalJ = 2;
+        final int VECINO = 1;
+        
+        if (posicioI == 0) {
+            iniciI = 0;
+        } else if (posicioI == (colonia.length - 1)) {
+            finalI = 1;
+        }
+        
+        if (posicioJ == 0) {
+            iniciJ = 0;
+        } else if (posicioJ == (colonia[posicioI].length -1)) {
+            finalJ = 1;
+        }
+
+        for (int i = posicioI - iniciI; i < (posicioI + finalI); i++) {
+            for (int j = posicioJ - iniciJ; j < (posicioJ + finalJ); j++) {
+                if (!(i == posicioI && j == posicioJ)) {
+                    if(colonia[i][j] == VECINO){
+                       sumVeins++; 
+                    }
+                }
+            }
+        }
+
+        return sumVeins;
+    }
 }

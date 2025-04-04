@@ -7,7 +7,7 @@ package com.mycompany._ra6_pt11_4_matveinikitacazallayamila;
 public class Principal {
 
     public static void main(String[] args) {
-        Bacteris colonia = new Bacteris();
+        Bacteris colonia = new Bacteris(5);
         colonia.mostrarColonia();
     }
     

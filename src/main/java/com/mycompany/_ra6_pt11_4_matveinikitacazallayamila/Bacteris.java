@@ -1,5 +1,7 @@
 package com.mycompany._ra6_pt11_4_matveinikitacazallayamila;
 
+import java.util.Arrays;
+
 
 /**
  * Classe Bacteris
@@ -79,17 +81,25 @@ public class Bacteris {
                 }
             }
         }
-        this.numIteracions++;
+        
+        
+        
+        if (!this.coloniesIguals()){
+            this.numIteracions++;
+            colonia = coloniaNova;
+        } else {
+            coloniaEstable = true;
+        } 
     }
     
     /**
      * Mètode per mostrar com es veu la colònia de bacteris en l'actual generàció
      */
     public void mostrarColonia(){
-        for (int i = 0; i < colonia.length; i++) {
+        for (int i = 0; i < coloniaNova.length; i++) {
             System.out.print("|");
-            for (int j = 0; j < colonia.length; j++) {
-                System.out.print(colonia[i][j]);
+            for (int j = 0; j < coloniaNova.length; j++) {
+                System.out.print(coloniaNova[i][j]);
             }
             System.out.print("|\n");
         }
@@ -124,5 +134,16 @@ public class Bacteris {
         }
 
         return sumVeins;
+    }
+    
+    private boolean coloniesIguals(){
+        for (int i = 0; i < colonia.length; i++) {
+            for (int j = 0; j < colonia.length; j++) {
+                if(colonia[i][j] != coloniaNova[i][j]){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

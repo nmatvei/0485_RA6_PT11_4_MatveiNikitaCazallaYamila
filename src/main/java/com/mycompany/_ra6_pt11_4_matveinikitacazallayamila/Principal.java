@@ -33,8 +33,12 @@ public class Principal {
         colonia.mostrarColonia();
         
         while(!colonia.isColoniaEstable()){
-            
+            System.out.println("Generació numero " + colonia.getNumIteracions());
+            colonia.novaGeneracio();
+            colonia.mostrarColonia();
         }
+        System.out.println("\nLa colonia és estable després de " + colonia.getNumIteracions() +
+                " iteracions.");
         
     }   
 }

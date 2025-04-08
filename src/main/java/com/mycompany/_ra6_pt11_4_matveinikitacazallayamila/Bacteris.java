@@ -9,8 +9,8 @@ package com.mycompany._ra6_pt11_4_matveinikitacazallayamila;
 public class Bacteris {
     
     /*Declaració de variables i atributs*/
-    private int colonia[][];
-    private int coloniaNova[][];
+    private char colonia[][];
+    private char coloniaNova[][];
     private boolean coloniaEstable;
     private int numIteracions;
     private final static int DIMENSIO_PER_DEFECTE = 30;
@@ -28,9 +28,9 @@ public class Bacteris {
      * @param dimensio 
      */
     public Bacteris(int dimensio) {
-        this.colonia = new int [dimensio][dimensio];
+        this.colonia = new char [dimensio][dimensio];
         this.generacioIncial();
-        this.coloniaNova = new int[dimensio][dimensio];
+        this.coloniaNova = new char[dimensio][dimensio];
         this.coloniaNova = this.colonia;
         this.coloniaEstable = false;
         this.numIteracions = 0;
@@ -40,10 +40,9 @@ public class Bacteris {
         return numIteracions;
     }
 
-    public void setNumIteracions(int numIteracions) {
-        this.numIteracions = numIteracions;
+    public boolean isColoniaEstable() {
+        return coloniaEstable;
     }
-    
     
     /**
      * Mètode generacioIncial per omplir la matriu que representa la colònia de 
@@ -52,25 +51,35 @@ public class Bacteris {
     private void generacioIncial(){
         for (int i = 0; i < colonia.length; i++) {
             for (int j = 0; j < colonia.length; j++) {
-                colonia[i][j] = (int) (Math.random() * 2);
+                int nombre = (int) (Math.random() * 2);
+                if (nombre == 1){
+                    colonia[i][j] = '#';
+                } else{
+                    colonia[i][j] = ' ';
+                }
             }
         }
     }
     
+    /**
+     * Mètode novaGeneracio per generar una nova generacio de bacteris a la colònia
+     */
     public void novaGeneracio(){
         for (int i = 0; i < colonia.length; i++) {
             for (int j = 0; j < colonia.length; j++) {
                 int veins = veins(i,j);
-                if(colonia[i][j] == 1){
+                if(colonia[i][j] == '#'){
                     if (veins < 2 || veins > 3){
-                        coloniaNova[i][j] = 1;
+                        coloniaNova[i][j] = ' ';
                     }
-                    else{
-                        
+                } else{
+                    if (veins == 3){
+                        coloniaNova[i][j] = '#';
                     }
                 }
             }
         }
+        this.numIteracions++;
     }
     
     /**
@@ -86,10 +95,11 @@ public class Bacteris {
         }
     }
     
+    
     public int veins(int posicioI, int posicioJ) {
         /*Declaració de variables*/
         int sumVeins = 0, iniciI = 1, iniciJ = 1 , finalI = 2, finalJ = 2;
-        final int VECINO = 1;
+        final char VEI = '#';
         
         if (posicioI == 0) {
             iniciI = 0;
@@ -106,7 +116,7 @@ public class Bacteris {
         for (int i = posicioI - iniciI; i < (posicioI + finalI); i++) {
             for (int j = posicioJ - iniciJ; j < (posicioJ + finalJ); j++) {
                 if (!(i == posicioI && j == posicioJ)) {
-                    if(colonia[i][j] == VECINO){
+                    if(colonia[i][j] == VEI){
                        sumVeins++; 
                     }
                 }

@@ -78,7 +78,7 @@ public class Bacteris {
      */
     public void novaGeneracio() {
 
-        copiarColonies(coloniaAntiga, colonia);
+        guardarColonies(coloniaAntiga, colonia);
         
         int comptadorEstable = 0;
 
@@ -106,7 +106,7 @@ public class Bacteris {
         if (comptadorEstable == (colonia.length * colonia[0].length)) {
             this.coloniaEstable = true;
         } else {
-            copiarColonies(colonia, coloniaNova);
+            guardarColonies(colonia, coloniaNova);
             compararColonies();
         }
         
@@ -115,7 +115,7 @@ public class Bacteris {
         this.numIteracions++;
     }
 
-    public void copiarColonies(char[][] array1, char[][] array2) {
+    public void guardarColonies(char[][] array1, char[][] array2) {
         
         for (int i = 0; i < array1.length; i++) {
             for (int j = 0; j < array1[i].length; j++) {

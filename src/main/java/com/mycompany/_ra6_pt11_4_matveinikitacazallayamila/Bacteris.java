@@ -36,8 +36,7 @@ public class Bacteris {
         this.colonia = new char[dimensio][dimensio];
         this.generacioIncial();
         this.coloniaNova = new char[dimensio][dimensio];
-        this.coloniaAntiga = new char[dimensio][dimensio];
-        this.coloniaNova = this.colonia;
+        this.coloniaAntiga = colonia;
         this.coloniaEstable = false;
         this.coloniaDuesVoltes = false;
         this.numIteracions = 0;
@@ -89,6 +88,7 @@ public class Bacteris {
                     if (veins <= 1) {
                         coloniaNova[i][j] = ' ';
                     } else if (veins == 2 || veins == 3) {
+                        coloniaNova[i][j] = colonia[i][j];
                         comptadorEstable++;
                     } else if (veins > 3) {
                         coloniaNova[i][j] = ' ';
@@ -97,17 +97,21 @@ public class Bacteris {
                     if (veins == 3) {
                         coloniaNova[i][j] = '#';
                     } else {
+                        coloniaNova[i][j] = colonia[i][j];
                         comptadorEstable++;
                     }
                 }
             }
         }
         
+        guardarColonies(colonia, coloniaNova);
+        
         if (comptadorEstable == (colonia.length * colonia[0].length)) {
             this.coloniaEstable = true;
         } else {
-            guardarColonies(colonia, coloniaNova);
-            compararColonies();
+            if (compararColonies() == (colonia.length * colonia[0].length)) {
+                this.coloniaDuesVoltes = true;
+            }
         }
         
         
@@ -125,7 +129,7 @@ public class Bacteris {
 
     }
     
-    public void compararColonies() {
+    public int compararColonies() {
         
         int comptadorIgual = 0;
         
@@ -137,12 +141,16 @@ public class Bacteris {
             }
         }
         
-        if (comptadorIgual == (colonia.length * colonia[0].length)) {
-            this.coloniaDuesVoltes = true;
-        }
+        return comptadorIgual;
         
     }
-
+    /*    
+    public boolean coloniesIgualsAntiga() {
+        boolean iguals = Arrays.deepEquals(coloniaAntiga, coloniaNova);
+        return iguals;
+    }
+    */
+    
     /**
      * Mètode per mostrar com es veu la colònia de bacteris en l'actual
      * generàció

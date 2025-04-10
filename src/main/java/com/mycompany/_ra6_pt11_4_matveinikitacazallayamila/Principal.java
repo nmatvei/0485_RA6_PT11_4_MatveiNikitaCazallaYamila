@@ -30,7 +30,7 @@ public class Principal {
         else{
             colonia = new Bacteris();
         }
-        System.out.println("\nPartim desde aquest punt:");
+        System.out.println("\nPartim des de aquest punt:");
         colonia.mostrarColonia();
         
         while(!colonia.isColoniaEstable() && !colonia.isColoniaDuesVoltes()){
@@ -39,7 +39,6 @@ public class Principal {
             if (!colonia.isColoniaEstable()) {
                 colonia.mostrarColonia();
             }
-            
         }
         
         if (!colonia.isColoniaDuesVoltes()) {

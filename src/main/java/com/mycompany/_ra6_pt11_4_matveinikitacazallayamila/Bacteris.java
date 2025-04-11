@@ -1,21 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany._ra6_pt11_4_matveinikitacazallayamila;
 
 import java.util.Arrays;
 
 /**
- *
+ * Classe Bacteris que representa una placa on es troben bacteris.
+ * 
  * @author Nikita i Yamila
  */
 public class Bacteris {
 
     /*Declaració de variables i atributs*/
-    private char colonia[][];
-    private char coloniaNova[][];
-    private char coloniaAntiga[][];
+    private int colonia[][];
+    private int coloniaNova[][];
+    private int coloniaAntiga[][];
     private boolean coloniaEstable, coloniaDuesVoltes;
     private int numIteracions;
     private final static int DIMENSIO_PER_DEFECTE = 30;
@@ -33,123 +30,53 @@ public class Bacteris {
      * @param dimensio
      */
     public Bacteris(int dimensio) {
-        this.colonia = new char[dimensio][dimensio];
+        this.colonia = new int[dimensio][dimensio];
+        this.coloniaNova = new int[dimensio][dimensio];
+        this.coloniaAntiga = new int[dimensio][dimensio];
         this.generacioIncial();
-        this.coloniaNova = new char[dimensio][dimensio];
-        this.coloniaAntiga = colonia;
         this.coloniaEstable = false;
         this.coloniaDuesVoltes = false;
         this.numIteracions = 0;
     }
-
+    
+    /**
+     * Mètode GET per conseguir el nombre d'iteracions
+     * 
+     * @return nombre d'iteracions
+     */
     public int getNumIteracions() {
         return numIteracions;
     }
-
+    
+    /**
+     * Mètode GET per veure si la colònia és estable
+     * 
+     * @return si la colònia és estable
+     */
     public boolean isColoniaEstable() {
         return coloniaEstable;
     }
-
+    
+    /**
+     * Mètode GET per veure si la colònia no es troba en un cicle de dues voltes
+     * 
+     * @return si es troba en un cicle de dues voltes
+     */
     public boolean isColoniaDuesVoltes() {
         return coloniaDuesVoltes;
     }
 
     /**
-     * Mètode generacioIncial per omplir la matriu que representa la colònia de
-     * bacteris
+     * Mètode generacióInicial per generar una colonia de manera aleatoria
      */
     private void generacioIncial() {
         for (int i = 0; i < colonia.length; i++) {
             for (int j = 0; j < colonia.length; j++) {
                 int nombre = (int) (Math.random() * 2);
-                if (nombre == 1) {
-                    colonia[i][j] = '#';
-                } else {
-                    colonia[i][j] = ' ';
-                }
+                    coloniaNova[i][j] = nombre;
             }
         }
     }
-
-    /**
-     * Mètode novaGeneracio per generar una nova generacio de bacteris a la
-     * colònia
-     */
-    public void novaGeneracio() {
-
-        guardarColonies(coloniaAntiga, colonia);
-        
-        int comptadorEstable = 0;
-
-        for (int i = 0; i < colonia.length; i++) {
-            for (int j = 0; j < colonia.length; j++) {
-                int veins = veins(i, j);
-                if (colonia[i][j] == '#') {
-                    if (veins <= 1) {
-                        coloniaNova[i][j] = ' ';
-                    } else if (veins == 2 || veins == 3) {
-                        coloniaNova[i][j] = colonia[i][j];
-                        comptadorEstable++;
-                    } else if (veins > 3) {
-                        coloniaNova[i][j] = ' ';
-                    }
-                } else {
-                    if (veins == 3) {
-                        coloniaNova[i][j] = '#';
-                    } else {
-                        coloniaNova[i][j] = colonia[i][j];
-                        comptadorEstable++;
-                    }
-                }
-            }
-        }
-        
-        guardarColonies(colonia, coloniaNova);
-        
-        if (comptadorEstable == (colonia.length * colonia[0].length)) {
-            this.coloniaEstable = true;
-        } else {
-            if (compararColonies() == (colonia.length * colonia[0].length)) {
-                this.coloniaDuesVoltes = true;
-            }
-        }
-        
-        
-
-        this.numIteracions++;
-    }
-
-    public void guardarColonies(char[][] array1, char[][] array2) {
-        
-        for (int i = 0; i < array1.length; i++) {
-            for (int j = 0; j < array1[i].length; j++) {
-                array1[i][j] = array2[i][j];
-            }
-        }
-
-    }
-    
-    public int compararColonies() {
-        
-        int comptadorIgual = 0;
-        
-        for (int i = 0; i < colonia.length; i++) {
-            for (int j = 0; j < colonia[i].length; j++) {
-                if (coloniaNova[i][j] == coloniaAntiga[i][j]) {
-                    comptadorIgual++;
-                }
-            }
-        }
-        
-        return comptadorIgual;
-        
-    }
-    /*    
-    public boolean coloniesIgualsAntiga() {
-        boolean iguals = Arrays.deepEquals(coloniaAntiga, coloniaNova);
-        return iguals;
-    }
-    */
     
     /**
      * Mètode per mostrar com es veu la colònia de bacteris en l'actual
@@ -159,10 +86,87 @@ public class Bacteris {
         for (int i = 0; i < colonia.length; i++) {
             System.out.print("|");
             for (int j = 0; j < colonia.length; j++) {
-                System.out.print(colonia[i][j]);
+                System.out.print(coloniaNova[i][j]);
             }
             System.out.print("|\n");
         }
+    }
+
+    /**
+     * Mètode novaGeneracio per generar una nova generacio de bacteris a la
+     * colònia i guardar els estàts anteriors de la colònia.
+     */
+    public void novaGeneracio() {
+        /*Copiem el contingut de la matrius a */
+        this.coloniaAntiga = copiarMatriu(colonia);
+        this.colonia = copiarMatriu(coloniaNova);
+        
+         for (int i = 0; i < colonia.length; i++) {
+            for (int j = 0; j < colonia.length; j++) {
+                int veins = veins(i,j);
+                if(colonia[i][j] == 1){
+                    if (veins < 2 || veins > 3){
+                        coloniaNova[i][j] = 0;
+                    }
+                } else{
+                    if (veins == 3){
+                        coloniaNova[i][j] = 1;
+                    }
+                }
+            }
+        }
+        
+        /*Determinem si la colònia és estàble o si es troba en un bucle de dues
+         voltes*/
+        if(coloniesIgualsAntiga()){
+            this.coloniaEstable = true;
+        } else if (coloniesIgualsLoop()){
+            this.coloniaDuesVoltes = true;
+        }
+        
+        /*Augmentem el número d'iteracions*/
+        this.numIteracions++;
+    }
+    
+    /**
+     * Mètode copiaMatriu per copiar una matriu utilitzat el mètode clone()
+     * @param original
+     * @return una còpia de la matriu introduïda com a paràmetre
+     */
+    private int[][] copiarMatriu(int[][] matriuOriginal) {
+        /*Declarem una matriu que serà la còpia*/
+        int[][] copiaMatriu = new int[matriuOriginal.length][];
+        
+        /*Estrutura FOR per copiar el contingut de la matriu*/
+        for (int i = 0; i < matriuOriginal.length; i++) {
+            copiaMatriu[i] = matriuOriginal[i].clone();
+        }
+        
+        /*Retornem la còpia de la matriu*/
+        return copiaMatriu;
+    }
+
+    /**
+     * Mètode coloniesIgualsAntiga per comprovar que el contingut de coloniaNova
+     * i colonia són iguals.
+     * 
+     * @return true o false
+     */    
+    private boolean coloniesIgualsAntiga() {
+        boolean iguals = Arrays.deepEquals(coloniaNova, colonia);
+        return iguals;
+    }
+    
+    /**
+     * Mètode coloniesIgualsLoop per comprovar si el contingut de coloniaNova i
+     * coloniaAntiga és el mateix, per veure si la colònia es troba en un cicle
+     * de dues voltes.
+     * 
+     * @return true o false
+     */
+    private boolean coloniesIgualsLoop(){
+        boolean iguals = Arrays.deepEquals(coloniaNova, coloniaAntiga);
+        return iguals;
     }
 
     /**
@@ -173,10 +177,11 @@ public class Bacteris {
      * @return el recompte de veïns
      */
     public int veins(int posicioI, int posicioJ) {
-
+        /*Declaració de variables*/
         int sumVeins = 0, iniciI = 1, iniciJ = 1, finalI = 2, finalJ = 2;
-        final char VEI = '#';
-
+        final int VEI = 1;
+        
+        /*Determinem les condicions per el següent FOR per que no es pasi de l'array*/
         if (posicioI == 0) {
             iniciI = 0;
         } else if (posicioI == (colonia.length - 1)) {
@@ -188,7 +193,9 @@ public class Bacteris {
         } else if (posicioJ == (colonia[posicioI].length - 1)) {
             finalJ = 1;
         }
-
+        
+        /*Estructura FOR per pasar d'una determinada manera per calular el nombre
+        veins d'una posició de la taula*/
         for (int i = posicioI - iniciI; i < (posicioI + finalI); i++) {
             for (int j = posicioJ - iniciJ; j < (posicioJ + finalJ); j++) {
                 if (!(i == posicioI && j == posicioJ)) {
@@ -198,7 +205,8 @@ public class Bacteris {
                 }
             }
         }
-
+        
+        /*Retornem el nombre de veïns*/
         return sumVeins;
     }
 }
